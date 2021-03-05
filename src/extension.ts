@@ -1,4 +1,3 @@
-import { cpuUsage } from 'process';
 import * as vscode from 'vscode';
 import FileService from './service';
 
