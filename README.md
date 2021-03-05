@@ -1,70 +1,51 @@
-# workpoints README
+# Workpoints
 
-This is the README for your extension "workpoints". After writing up a brief description, we recommend including the following sections.
+> Disclaimer: This is not an officially released extension, you may experience bugs.
+
+## Donation
+
+Do you like this extension? Support it by donating, creating an issue or pull request.
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/capriok7)
+
+## Install
+
+Plugin installation is performed in a few stages:
+
+* Press <kbd>F1</kbd> and select `Extensions: Install Extensions`.
+* Search and choose `Workpoints`.
+* Install Extension.
+
+See the [extension installation guide](https://code.visualstudio.com/docs/editor/extension-gallery) for details.
+
+## Usage
+
+Install the extension, You may need to change your keyboard shortcuts within VSCode.
+* Press <kbd>F1</kbd> and search for `Open Key`.
+* Choose `Preferences: Open Keyboard Shortcuts`.
+
+* Set the following commands to these shortcuts, or anything you wish.
+* Find workpoints.setpoint, assign this to `Ctrl + Shift + /`
+* Find workpoints.prevpoint, assign this to `Ctrl + <`
+* Find workpoints.nextpoint, assign this to `Ctrl + >`
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+* Multiple files with corresponding Workpoint values
+* Add and remove Workpoints easily with one shortcut
+* Quickly Cycle through Workpoints in numerical order
+* Status Bar item when clicked, shows all Workpoints in active file
 
-For example if there is an image subfolder under your extension project workspace:
+## Questions
 
-\!\[feature X\]\(images/feature-x.png\)
+**The Extension is not working properly**
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+You must assign the keyboard shortcuts mentioned above in the `Usage` step.
 
-## Requirements
+## Changelog
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+See the [changelog](https://github.com/mrmlnc/vscode-scss/blob/master/cahgnelog.md) for release version logs.
 
-## Extension Settings
+## License
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+This software is released under the terms of the MIT license.

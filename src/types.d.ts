@@ -1,5 +1,3 @@
-type Line = number
-
 interface Files {
 	[key: string]: FileService
 }
@@ -13,3 +11,5 @@ interface FileService {
 	DecementActivePoint: () => void
 	IncementActivePoint: () => void
 }
+
+type Line = number

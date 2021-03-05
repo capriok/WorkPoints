@@ -23,8 +23,9 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(commands.registerCommand('workpoints.setpoint', NextPoint))
 	context.subscriptions.push(commands.registerCommand('workpoints.setpoint', ShowPoints))
 
-
+	// 
 	// Commands
+	// 
 
 	function SetPoint() {
 		const editor = window.activeTextEditor
@@ -32,99 +33,100 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const cursorPosition = editor.selection.active.line + 1
 		const fileName = editor.document.fileName
-		let currentService = files[fileName]
+		let service = files[fileName]
 
-		if (!currentService) {
+		if (!service) {
 			files[fileName] = new FileService()
-			currentService = files[fileName]
+			service = files[fileName]
 			console.log(files)
 		}
 
-		currentService.points.includes(cursorPosition)
-			? currentService.RemovePoint(cursorPosition)
-			: currentService.AddPoint(cursorPosition)
+		service.points.includes(cursorPosition)
+			? service.RemovePoint(cursorPosition)
+			: service.AddPoint(cursorPosition)
 
-		if (currentService.points.length === 0)
+		if (service.points.length === 0)
 			delete files[fileName]
 
-		updateStatus(currentService)
+		updateStatus(service)
 	}
 	function PrevPoint() {
 		const editor = window.activeTextEditor
 		if (!editor) return window.showInformationMessage('_Editor Not Found.')
 
-		let currentService = files[editor.document.fileName]
-		if (!currentService || currentService.points.length === 0)
-			return window.showInformationMessage('No WorkPoints, Add (Ctrl+Shift+/).')
+		let service = files[editor.document.fileName]
+		if (!service || service.points.length === 0)
+			return window.showInformationMessage('No Workpoints, Add (Ctrl+Shift+/).')
 
-		currentService.DecementActivePoint()
-		console.log("NEW ACTIVE " + currentService.ActivePoint())
-		movePoint(editor, currentService)
+		service.DecementActivePoint()
+		console.log("NEW ACTIVE " + service.ActivePoint())
+		movePoint(editor, service)
 	}
 	function NextPoint() {
 		const editor = window.activeTextEditor
 		if (!editor) return window.showInformationMessage('_Editor Not Found.')
 
-		let currentService = files[editor.document.fileName]
-		if (!currentService || currentService.points.length === 0)
-			return window.showInformationMessage('No WorkPoints, Add (Ctrl+Shift+/).')
+		let service = files[editor.document.fileName]
+		if (!service || service.points.length === 0)
+			return window.showInformationMessage('No Workpoints, Add (Ctrl+Shift+/).')
 
-		currentService.IncementActivePoint()
-		console.log("NEW ACTIVE " + currentService.ActivePoint())
-		movePoint(editor, currentService)
+		service.IncementActivePoint()
+		console.log("NEW ACTIVE " + service.ActivePoint())
+		movePoint(editor, service)
 	}
 
 	function ShowPoints() {
 		const editor = window.activeTextEditor
 		if (!editor) return window.showInformationMessage('Editor Not Found.')
 
-		window.showInformationMessage(`WorkPoints: ${files[editor.document.fileName].points.map(p => ' ' + p)}`)
+		window.showInformationMessage(`Workpoints: ${files[editor.document.fileName].points.map(p => ' ' + p)}`)
 	}
 
+	// 
+	// Functions
+	// 
 
-	// Funcitons
-
-	function movePoint(editor: vscode.TextEditor, currentService: FileService): void | Thenable<string | undefined> {
-		const newPosition = editor.selection.active.with(currentService.ActivePoint() - 1, 0)
-		const newRange = editor.document.lineAt(currentService.ActivePoint()).range
+	function movePoint(editor: vscode.TextEditor, service: FileService): void | Thenable<string | undefined> {
+		const newPosition = editor.selection.active.with(service.ActivePoint() - 1, 0)
+		const newRange = editor.document.lineAt(service.ActivePoint()).range
 
 		editor.selection = new Selection(newPosition, newPosition)
 		editor.revealRange(newRange, vscode.TextEditorRevealType.InCenter)
-		updateStatus(currentService)
+		updateStatus(service)
 		console.log('MOVED');
 	}
 
-	function updateStatus(currentService: FileService): void | Thenable<string | undefined> {
-		const points = currentService.points
+	function updateStatus(service: FileService): void | Thenable<string | undefined> {
+		const points = service.points
 
 		if (points.length > 0) {
-			const active = currentService.ActivePoint()
+			const active = service.ActivePoint()
 			let status = ` ( ${active} ) `
-			let prev2 = points[currentService.active - 2]
-			let prev1 = points[currentService.active - 1]
-			let next1 = points[currentService.active + 1]
-			let next2 = points[currentService.active + 2]
+			let prev2 = points[service.active - 2]
+			let prev1 = points[service.active - 1]
+			let next1 = points[service.active + 1]
+			let next2 = points[service.active + 2]
 
 			if (points.length >= 3) {
-				if (currentService.active === 0) {
+				if (service.active === 0) {
 					prev1 = points[points.length - 1]
-				} else if (currentService.active === points.length - 1) {
+				} else if (service.active === points.length - 1) {
 					next1 = points[0]
 				}
 				status = `${prev1} ( ${active} ) ${next1}`
 			}
 
 			if (points.length >= 5) {
-				if (currentService.active === 0) {
+				if (service.active === 0) {
 					prev1 = points[points.length - 1]
 					prev2 = points[points.length - 2]
-				} else if (currentService.active === 1) {
+				} else if (service.active === 1) {
 					prev1 = points[0]
 					prev2 = points[points.length - 1]
-				} else if (currentService.active === points.length - 2) {
+				} else if (service.active === points.length - 2) {
 					next1 = points[points.length - 1]
 					next2 = points[0]
-				} else if (currentService.active === points.length - 1) {
+				} else if (service.active === points.length - 1) {
 					next1 = points[0]
 					next2 = points[1]
 				}
@@ -136,7 +138,7 @@ export function activate(context: vscode.ExtensionContext) {
 		} else {
 			wpStatus.hide()
 		}
-		console.log(currentService)
+		console.log(service)
 	}
 }
 

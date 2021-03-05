@@ -5,8 +5,8 @@ export default class FileService {
 	active: number
 
 	constructor() {
-		this.points = [];
-		this.active = 0;
+		this.points = []
+		this.active = 0
 	}
 
 	ActivePoint(): number {
