@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-export default class FileService {
 
+export default class FileService {
 	points: Line[]
 	active: number
 
