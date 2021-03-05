@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import { window } from 'vscode';
 
 export default class FileService {
 	points: Line[]
@@ -14,15 +14,13 @@ export default class FileService {
 	}
 
 	AddPoint(point: number): void {
-		if (this.points.includes(point)) return this.RemovePoint(point)
-
 		this.points.push(point)
 		this.points = Array.from(new Set(this.points)).sort((a, b) => a - b)
-		vscode.window.showInformationMessage(`Added Line ${point} to Workpoints`)
+		window.showInformationMessage(`Added Line ${point} to Workpoints`)
 	}
 	RemovePoint(point: number): void {
 		this.points = this.points.filter(wp => wp !== point)
-		vscode.window.showInformationMessage(`Removed Line ${point} from Workpoints.`)
+		window.showInformationMessage(`Removed Line ${point} from Workpoints.`)
 	}
 
 	DecementActivePoint(): void {

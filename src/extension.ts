@@ -1,23 +1,20 @@
-import {
-	window, commands, ExtensionContext, StatusBarItem,
-	StatusBarAlignment, TextEditor, Selection, TextEditorRevealType
-} from 'vscode'
+import * as vscode from 'vscode'
+import { window, commands, Selection } from 'vscode'
 import FileService from './service'
-let wpStatus: StatusBarItem
+let wpStatus: vscode.StatusBarItem
 
-export function activate(context: ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "workpoints" is now active!')
 
 	let files: Files = {}
 
-	wpStatus = window.createStatusBarItem(StatusBarAlignment.Right, 1000)
+	wpStatus = window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000)
 	wpStatus.command = 'workpoints.showpoints'
 	context.subscriptions.push(wpStatus)
 
 	// TODO
 	// when lines are added => update fileservice points []
 	// when lines are delete => remove from fileservice points []
-
 
 	context.subscriptions.push(
 		commands.registerCommand('workpoints.setpoint', () => {
@@ -34,8 +31,9 @@ export function activate(context: ExtensionContext) {
 				console.log(files)
 			}
 
-			currentService.AddPoint(cursorPosition)
-			console.log(currentService)
+			currentService.points.includes(cursorPosition)
+				? currentService.RemovePoint(cursorPosition)
+				: currentService.AddPoint(cursorPosition)
 
 			if (currentService.points.length === 0)
 				delete files[fileName]
@@ -54,8 +52,8 @@ export function activate(context: ExtensionContext) {
 				return window.showInformationMessage('No WorkPoints, Add (Ctrl+Shift+/).')
 
 			currentService.DecementActivePoint()
+			console.log("NEW ACTIVE " + currentService.ActivePoint())
 			movePoint(editor, currentService)
-			updateStatus(currentService)
 		})
 	)
 
@@ -69,18 +67,19 @@ export function activate(context: ExtensionContext) {
 				return window.showInformationMessage('No WorkPoints, Add (Ctrl+Shift+/).')
 
 			currentService.IncementActivePoint()
+			console.log("NEW ACTIVE " + currentService.ActivePoint())
 			movePoint(editor, currentService)
-			updateStatus(currentService)
 		})
 	)
 
-	function movePoint(editor: TextEditor, currentService: FileService): void | Thenable<string | undefined> {
+	function movePoint(editor: vscode.TextEditor, currentService: FileService): void | Thenable<string | undefined> {
 		const newPosition = editor.selection.active.with(currentService.ActivePoint() - 1, 0)
 		const newRange = editor.document.lineAt(currentService.ActivePoint()).range
 
 		editor.selection = new Selection(newPosition, newPosition)
-		editor.revealRange(newRange, TextEditorRevealType.InCenter)
-		console.log(currentService)
+		editor.revealRange(newRange, vscode.TextEditorRevealType.InCenter)
+		updateStatus(currentService)
+		console.log('MOVED');
 	}
 
 	context.subscriptions.push(commands.registerCommand('workpoints.showpoints', () => {
@@ -130,9 +129,9 @@ export function activate(context: ExtensionContext) {
 			wpStatus.text = status
 			wpStatus.show()
 		} else {
-			wpStatus.text = 'No WorkPoints'
 			wpStatus.hide()
 		}
+		console.log(currentService)
 	}
 }
 
