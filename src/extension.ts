@@ -15,62 +15,74 @@ export function activate(context: vscode.ExtensionContext) {
 	// TODO
 	// when lines are added => update fileservice points []
 	// when lines are delete => remove from fileservice points []
+	// Maybe this
+	// context.subscriptions.push(vscode.window.onDidChangeVisibleTextEditors(() => {}))
 
-	context.subscriptions.push(
-		commands.registerCommand('workpoints.setpoint', () => {
-			const editor = window.activeTextEditor
-			if (!editor) return window.showInformationMessage('Editor Not Found.')
+	context.subscriptions.push(commands.registerCommand('workpoints.setpoint', SetPoint))
+	context.subscriptions.push(commands.registerCommand('workpoints.setpoint', PrevPoint))
+	context.subscriptions.push(commands.registerCommand('workpoints.setpoint', NextPoint))
+	context.subscriptions.push(commands.registerCommand('workpoints.setpoint', ShowPoints))
 
-			const cursorPosition = editor.selection.active.line + 1
-			const fileName = editor.document.fileName
-			let currentService = files[fileName]
 
-			if (!currentService) {
-				files[fileName] = new FileService()
-				currentService = files[fileName]
-				console.log(files)
-			}
+	// Commands
 
-			currentService.points.includes(cursorPosition)
-				? currentService.RemovePoint(cursorPosition)
-				: currentService.AddPoint(cursorPosition)
+	function SetPoint() {
+		const editor = window.activeTextEditor
+		if (!editor) return window.showInformationMessage('Editor Not Found.')
 
-			if (currentService.points.length === 0)
-				delete files[fileName]
+		const cursorPosition = editor.selection.active.line + 1
+		const fileName = editor.document.fileName
+		let currentService = files[fileName]
 
-			updateStatus(currentService)
-		})
-	)
+		if (!currentService) {
+			files[fileName] = new FileService()
+			currentService = files[fileName]
+			console.log(files)
+		}
 
-	context.subscriptions.push(
-		commands.registerCommand('workpoints.prevpoint', () => {
-			const editor = window.activeTextEditor
-			if (!editor) return window.showInformationMessage('_Editor Not Found.')
+		currentService.points.includes(cursorPosition)
+			? currentService.RemovePoint(cursorPosition)
+			: currentService.AddPoint(cursorPosition)
 
-			let currentService = files[editor.document.fileName]
-			if (!currentService || currentService.points.length === 0)
-				return window.showInformationMessage('No WorkPoints, Add (Ctrl+Shift+/).')
+		if (currentService.points.length === 0)
+			delete files[fileName]
 
-			currentService.DecementActivePoint()
-			console.log("NEW ACTIVE " + currentService.ActivePoint())
-			movePoint(editor, currentService)
-		})
-	)
+		updateStatus(currentService)
+	}
+	function PrevPoint() {
+		const editor = window.activeTextEditor
+		if (!editor) return window.showInformationMessage('_Editor Not Found.')
 
-	context.subscriptions.push(
-		commands.registerCommand('workpoints.nextpoint', () => {
-			const editor = window.activeTextEditor
-			if (!editor) return window.showInformationMessage('_Editor Not Found.')
+		let currentService = files[editor.document.fileName]
+		if (!currentService || currentService.points.length === 0)
+			return window.showInformationMessage('No WorkPoints, Add (Ctrl+Shift+/).')
 
-			let currentService = files[editor.document.fileName]
-			if (!currentService || currentService.points.length === 0)
-				return window.showInformationMessage('No WorkPoints, Add (Ctrl+Shift+/).')
+		currentService.DecementActivePoint()
+		console.log("NEW ACTIVE " + currentService.ActivePoint())
+		movePoint(editor, currentService)
+	}
+	function NextPoint() {
+		const editor = window.activeTextEditor
+		if (!editor) return window.showInformationMessage('_Editor Not Found.')
 
-			currentService.IncementActivePoint()
-			console.log("NEW ACTIVE " + currentService.ActivePoint())
-			movePoint(editor, currentService)
-		})
-	)
+		let currentService = files[editor.document.fileName]
+		if (!currentService || currentService.points.length === 0)
+			return window.showInformationMessage('No WorkPoints, Add (Ctrl+Shift+/).')
+
+		currentService.IncementActivePoint()
+		console.log("NEW ACTIVE " + currentService.ActivePoint())
+		movePoint(editor, currentService)
+	}
+
+	function ShowPoints() {
+		const editor = window.activeTextEditor
+		if (!editor) return window.showInformationMessage('Editor Not Found.')
+
+		window.showInformationMessage(`WorkPoints: ${files[editor.document.fileName].points.map(p => ' ' + p)}`)
+	}
+
+
+	// Funcitons
 
 	function movePoint(editor: vscode.TextEditor, currentService: FileService): void | Thenable<string | undefined> {
 		const newPosition = editor.selection.active.with(currentService.ActivePoint() - 1, 0)
@@ -81,13 +93,6 @@ export function activate(context: vscode.ExtensionContext) {
 		updateStatus(currentService)
 		console.log('MOVED');
 	}
-
-	context.subscriptions.push(commands.registerCommand('workpoints.showpoints', () => {
-		const editor = window.activeTextEditor
-		if (!editor) return window.showInformationMessage('Editor Not Found.')
-
-		window.showInformationMessage(`WorkPoints: ${files[editor.document.fileName].points.map(p => ' ' + p)}`)
-	}))
 
 	function updateStatus(currentService: FileService): void | Thenable<string | undefined> {
 		const points = currentService.points
