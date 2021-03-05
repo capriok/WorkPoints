@@ -12,7 +12,8 @@
   "activationEvents": [
     "onCommand:workpoints.setpoint",
     "onCommand:workpoints.prevpoint",
-    "onCommand:workpoints.nextpoint"
+    "onCommand:workpoints.nextpoint",
+    "onCommand:workpoints.showpoints"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -28,6 +29,12 @@
       {
         "command": "workpoints.nextpoint",
         "key": "ctrl+."
+      }
+    ],
+    "commands": [
+      {
+        "command": "workpoints.showpoints",
+        "title": "WorkPoints"
       }
     ]
   },
