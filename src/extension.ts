@@ -4,8 +4,6 @@ import FileService from './service'
 let wpStatus: vscode.StatusBarItem
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Congratulations, your extension "workpoints" is now active!')
-
 	let files: Files = {}
 
 	// 
