@@ -8,6 +8,10 @@ Do you like this extension? Support it by donating, creating an issue or pull re
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/capriok7)
 
+## Marketplace
+
+[Check it out on the Marketplace](https://marketplace.visualstudio.com/items?itemName=capriok.workpoints)
+
 ## Install
 
 Plugin installation is performed in a few stages:
