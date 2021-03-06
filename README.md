@@ -25,9 +25,9 @@ Install the extension, You may need to change your keyboard shortcuts within VSC
 * Choose `Preferences: Open Keyboard Shortcuts`.
 
 * Set the following commands to these shortcuts, or anything you wish.
-* Find workpoints.setpoint, assign this to `Ctrl + Shift + /`
-* Find workpoints.prevpoint, assign this to `Ctrl + <`
-* Find workpoints.nextpoint, assign this to `Ctrl + >`
+* Find `workpoints.setpoint`, assign this to `Ctrl + Shift + /`
+* Find `workpoints.prevpoint`, assign this to `Ctrl + <`
+* Find `workpoints.nextpoint`, assign this to `Ctrl + >`
 
 ## Features
 

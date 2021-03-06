@@ -16,11 +16,9 @@ export default class FileService {
 	AddPoint(point: number): void {
 		this.points.push(point)
 		this.points = Array.from(new Set(this.points)).sort((a, b) => a - b)
-		window.showInformationMessage(`Added Line ${point} to Workpoints`)
 	}
 	RemovePoint(point: number): void {
 		this.points = this.points.filter(wp => wp !== point)
-		window.showInformationMessage(`Removed Line ${point} from Workpoints.`)
 	}
 
 	DecementActivePoint(): void {
