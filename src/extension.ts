@@ -115,12 +115,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function updateStatus(service: FileService): void | Thenable<string | undefined> {
 		const points = service.points
+		const len = points.length
 
-		if (points.length > 0) {
+		if (len > 0) {
 			const active = service.ActivePoint()
 
-			if (points.length <= 2) {
-				wpStatus.text = ` ( ${active} ) `
+			if (len === 1) {
+				wpStatus.text = `[ ${active} ]`
 				wpStatus.show()
 				return
 			}
@@ -132,27 +133,38 @@ export function activate(context: vscode.ExtensionContext) {
 
 			switch (service.active) {
 				case 0:
-					prev1 = points[points.length - 1]
-					prev2 = points[points.length - 2]
+					prev1 = points[len - 1]
+					prev2 = points[len - 2]
 					break;
 				case 1:
 					prev1 = points[0]
-					prev2 = points[points.length - 1]
+					prev2 = points[len - 1]
 					break;
-				case points.length - 2:
-					next1 = points[points.length - 1]
+				case len - 2:
+					next1 = points[len - 1]
 					next2 = points[0]
 					break;
-				case points.length - 1:
+				case len - 1:
 					next1 = points[0]
 					next2 = points[1]
 					break;
 			}
 
-			if (points.length >= 5)
-				wpStatus.text = `${prev2} | ${prev1} ( ${active} ) ${next1} | ${next2}`
-			else if (points.length >= 3)
-				wpStatus.text = `${prev1} ( ${active} ) ${next1}`
+			if (len === 2) {
+				if (service.active === 0) {
+					prev1 = points[1]
+					next1 = points[1]
+				}
+				else {
+					prev1 = points[0]
+					next1 = points[0]
+				}
+			}
+
+			if (len >= 5)
+				wpStatus.text = `[ ${prev2} [ ${prev1} [ ${active} ] ${next1} ] ${next2} ]`
+			else if (len >= 2)
+				wpStatus.text = `[ ${prev1} [ ${active} ] ${next1} ]`
 
 			wpStatus.show()
 		} else {
