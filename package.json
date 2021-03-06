@@ -1,5 +1,6 @@
 {
   "name": "workpoints",
+  "publisher": "capriok",
   "displayName": "Workpoints",
   "description": "",
   "version": "0.0.1",
@@ -31,6 +32,7 @@
       }
     ]
   },
+  "repository": "https://github.com/capriok/VSCode-Workpoints",
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
