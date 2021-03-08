@@ -1,9 +1,10 @@
 {
   "name": "workpoints",
-  "publisher": "capriok",
-  "displayName": "Workpoints",
-  "description": "",
   "version": "0.0.1",
+  "publisher": "capriok",
+  "displayName": "WorkPoints",
+  "description": "Create and cycle through points in which you are working within files.",
+  "icon": "assets/workpoints_icon.png",
   "engines": {
     "vscode": "^1.53.0"
   },
@@ -32,7 +33,7 @@
       }
     ]
   },
-  "repository": "https://github.com/capriok/VSCode-Workpoints",
+  "repository": "https://github.com/capriok/WorkPoints",
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
