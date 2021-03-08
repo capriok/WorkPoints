@@ -1,6 +1,8 @@
-# Workpoints
+# WorkPoints
 
 > Disclaimer: This is not an officially released extension, you may experience bugs.
+
+![ screencast ](https://i.imgur.com/AbahyL7.gif)
 
 ## Donation
 
@@ -20,31 +22,31 @@ See the [extension installation guide](https://code.visualstudio.com/docs/editor
 
 ## Usage
 
-Install the extension, You may need to change your keyboard shortcuts within VSCode.
+Install the extension, the following shotcuts should be assigned after installation. Set the shortcuts manually if not.
 * Press <kbd>F1</kbd> and search for `Open Key`.
 * Choose `Preferences: Open Keyboard Shortcuts`.
 
-* Set the following commands to these shortcuts, or anything you wish.
-* Find `workpoints.setpoint`, assign this to `Ctrl + Shift + /`
-* Find `workpoints.prevpoint`, assign this to `Ctrl + <`
-* Find `workpoints.nextpoint`, assign this to `Ctrl + >`
+* Set the following commands to these shortcuts, or oany other shortcut.
+* Find `workpoints.setpoint`, assign this to `Ctrl + Shift + /`.
+* Find `workpoints.prevpoint`, assign this to `Ctrl + <`.
+* Find `workpoints.nextpoint`, assign this to `Ctrl + >`.
 
 ## Features
 
-* Multiple files with corresponding Workpoint values
-* Add and remove Workpoints easily with one shortcut
-* Quickly Cycle through Workpoints in numerical order
-* Status Bar item when clicked, shows all Workpoints in active file
+* Multiple files with corresponding workpoint values.
+* Add and remove workpoints easily with one shortcut.
+* Quickly cycle through workpoints in numerical order.
+* Status bar item, see and remove existing workpoints.
 
 ## Questions
 
 **The Extension is not working properly**
 
-You must assign the keyboard shortcuts mentioned above in the `Usage` step.
+You may have to assign the keyboard shortcuts mentioned above in the `Usage` step.
 
 ## Changelog
 
-See the [changelog](https://github.com/mrmlnc/vscode-scss/blob/master/cahgnelog.md) for release version logs.
+See the [changelog](https://github.com/mrmlnc/vscode-scss/blob/master/changelog.md) for release version logs.
 
 ## License
 
