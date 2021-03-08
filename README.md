@@ -19,7 +19,7 @@ Do you like this extension? Support it by donating, creating an issue or pull re
 Plugin installation is performed in a few stages:
 
 * Press <kbd>F1</kbd> and select `Extensions: Install Extensions`.
-* Search and choose `Workpoints`.
+* Search and choose `WorkPoints`.
 * Install Extension.
 
 See the [extension installation guide](https://code.visualstudio.com/docs/editor/extension-gallery) for details.
