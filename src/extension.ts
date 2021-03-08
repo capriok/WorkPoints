@@ -1,24 +1,26 @@
 import * as vscode from 'vscode'
-import { window, commands, Selection } from 'vscode'
+import { window, commands } from 'vscode'
+import { createStatusBarItem } from './create-sbi'
 import FileService from './service'
-let wpStatus: vscode.StatusBarItem
 
 export function activate(context: vscode.ExtensionContext) {
+
 	let files: Files = {}
 
-	// 
-	// StatusBarItem
-	// 
+	const sbi = createStatusBarItem(context)
 
-	wpStatus = window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000)
-	wpStatus.command = 'workpoints.showpoints'
-	context.subscriptions.push(wpStatus)
+	context.subscriptions.push(commands.registerCommand('workpoints.setpoint', SetPoint))
+	context.subscriptions.push(commands.registerCommand('workpoints.prevpoint', PrevPoint))
+	context.subscriptions.push(commands.registerCommand('workpoints.nextpoint', NextPoint))
+	context.subscriptions.push(commands.registerCommand('workpoints.showpoints', ShowPoints))
 
-	// 
-	// Commands
-	// 
+	// TODO
+	// when lines are added => update fileservice points []
+	// when lines are delete => remove from fileservice points []
+	// Maybe this
+	// context.subscriptions.push(vscode.window.onDidChangeVisibleTextEditors(() => {}))
 
-	function SetPoint() {
+	function SetPoint(): void | Thenable<string | undefined> {
 		const editor = window.activeTextEditor
 		if (!editor) return window.showInformationMessage('Editor Not Found.')
 
@@ -29,7 +31,6 @@ export function activate(context: vscode.ExtensionContext) {
 		if (!service) {
 			files[fileName] = new FileService()
 			service = files[fileName]
-			// console.log(files)
 		}
 
 		service.points.includes(cursorPosition)
@@ -42,35 +43,35 @@ export function activate(context: vscode.ExtensionContext) {
 		updateStatus(service)
 	}
 
-	function PrevPoint() {
+	function PrevPoint(): void | Thenable<string | undefined> {
 		const editor = window.activeTextEditor
-		if (!editor) return window.showInformationMessage('_Editor Not Found.')
+		if (!editor) return window.showInformationMessage('Editor Not Found.')
 
 		let service = files[editor.document.fileName]
 		if (!service || service.points.length === 0)
-			return window.showInformationMessage('No Workpoints, Add (Ctrl+Shift+/).')
+			return window.showInformationMessage('No workpoints, Add (Ctrl+Shift+/).')
 
 		service.DecementActivePoint()
 		movePoint(editor, service)
 	}
 
-	function NextPoint() {
+	function NextPoint(): void | Thenable<string | undefined> {
 		const editor = window.activeTextEditor
-		if (!editor) return window.showInformationMessage('_Editor Not Found.')
+		if (!editor) return window.showInformationMessage('Editor Not Found.')
 
 		let service = files[editor.document.fileName]
 		if (!service || service.points.length === 0)
-			return window.showInformationMessage('No Workpoints, Add (Ctrl+Shift+/).')
+			return window.showInformationMessage('No workpoints, Add (Ctrl+Shift+/).')
 
 		service.IncementActivePoint()
 		movePoint(editor, service)
 	}
 
-	function ShowPoints() {
+	function ShowPoints(): void | Thenable<string | undefined> {
 		const editor = window.activeTextEditor
 		if (!editor) return window.showInformationMessage('Editor Not Found.')
 
-		const Destroy = 'Destroy Workpoints'
+		const Destroy = 'Destroy workpoints'
 		window.showInformationMessage(`Workpoints: ${files[editor.document.fileName].points.map(p => ' ' + p)}`, Destroy)
 			.then(selection => {
 				const service = editor.document.fileName
@@ -81,53 +82,36 @@ export function activate(context: vscode.ExtensionContext) {
 			})
 	}
 
-	// 
-	// Subscriptions
-	// 
-
-	// TODO
-	// when lines are added => update fileservice points []
-	// when lines are delete => remove from fileservice points []
-	// Maybe this
-	// context.subscriptions.push(vscode.window.onDidChangeVisibleTextEditors(() => {}))
-
-	context.subscriptions.push(commands.registerCommand('workpoints.setpoint', SetPoint))
-	context.subscriptions.push(commands.registerCommand('workpoints.prevpoint', PrevPoint))
-	context.subscriptions.push(commands.registerCommand('workpoints.nextpoint', NextPoint))
-	context.subscriptions.push(commands.registerCommand('workpoints.showpoints', ShowPoints))
-
-	// 
-	// Functions
-	// 
-
-	function movePoint(editor: vscode.TextEditor, service: FileService): void | Thenable<string | undefined> {
+	function movePoint(editor: vscode.TextEditor, service: FileService): void {
 		const newPosition = editor.selection.active.with(service.ActivePoint() - 1, 0)
 		const newRange = editor.document.lineAt(
-			editor.document.lineCount === service.ActivePoint() ? service.ActivePoint() - 1 : service.ActivePoint()
+			editor.document.lineCount === service.ActivePoint()
+				? service.ActivePoint() - 1
+				: service.ActivePoint()
 		).range
 
-		editor.selection = new Selection(newPosition, newPosition)
+		editor.selection = new vscode.Selection(newPosition, newPosition)
 		editor.revealRange(newRange, vscode.TextEditorRevealType.InCenter)
 		updateStatus(service)
 	}
 
-	function updateStatus(service: FileService): void | Thenable<string | undefined> {
+	function updateStatus(service: FileService): void {
 		const points = service.points
 		const len = points.length
 
 		if (len > 0) {
 			const active = service.ActivePoint()
 
-			if (len === 1) {
-				wpStatus.text = `[ ${active} ]`
-				wpStatus.show()
-				return
-			}
-
 			let prev2 = points[service.active - 2]
 			let prev1 = points[service.active - 1]
 			let next1 = points[service.active + 1]
 			let next2 = points[service.active + 2]
+
+			if (len === 1) {
+				sbi.text = `[ ${active} ]`
+				sbi.show()
+				return
+			}
 
 			switch (service.active) {
 				case 0:
@@ -159,16 +143,14 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			}
 
-			if (len >= 5)
-				wpStatus.text = `[ ${prev2} [ ${prev1} [ ${active} ] ${next1} ] ${next2} ]`
-			else if (len >= 2)
-				wpStatus.text = `[ ${prev1} [ ${active} ] ${next1} ]`
+			len >= 5
+				? sbi.text = `[ ${prev2} [ ${prev1} [ ${active} ] ${next1} ] ${next2} ]`
+				: sbi.text = `[ ${prev1} [ ${active} ] ${next1} ]`
 
-			wpStatus.show()
+			sbi.show()
 		} else {
-			wpStatus.hide()
+			sbi.hide()
 		}
-		// console.log(service)
 	}
 }
 

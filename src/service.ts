@@ -1,5 +1,3 @@
-import { window } from 'vscode';
-
 export default class FileService {
 	points: Line[]
 	active: number
