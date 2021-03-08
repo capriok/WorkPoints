@@ -50,7 +50,7 @@ You may have to assign the keyboard shortcuts mentioned above in the `Usage` ste
 
 ## Changelog
 
-See the [changelog](https://github.com/mrmlnc/vscode-scss/blob/master/changelog.md) for release version logs.
+See the [changelog](https://github.com/capriok/WorkPoints/blob/master/changelog.md) for release version logs.
 
 ## License
 
