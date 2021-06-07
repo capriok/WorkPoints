@@ -30,7 +30,7 @@ Install the extension, the following shotcuts should be assigned after installat
 * Press <kbd>F1</kbd> and search for `Open Key`.
 * Choose `Preferences: Open Keyboard Shortcuts`.
 
-* Set the following commands to these shortcuts, or oany other shortcut.
+* Set the following commands to these shortcuts, or any of your choice.
 * Find `workpoints.setpoint`, assign this to `Ctrl + Shift + /`.
 * Find `workpoints.prevpoint`, assign this to `Ctrl + <`.
 * Find `workpoints.nextpoint`, assign this to `Ctrl + >`.
